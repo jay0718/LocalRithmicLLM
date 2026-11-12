@@ -1,0 +1,52 @@
+[project]
+name = "localrithmicllm"
+version = "0.1.0"
+description = "Self-hosted market data platform with real-time GEX and a local LLM gateway"
+requires-python = ">=3.12"
+dependencies = [
+    "lrl-common",
+    "lrl-collector",
+    "lrl-console",
+    "lrl-gateway",
+    "lrl-gex",
+    "lrl-pipeline",
+]
+
+[tool.uv.workspace]
+members = ["packages/*", "services/*"]
+
+[tool.uv.sources]
+lrl-common = { workspace = true }
+lrl-collector = { workspace = true }
+lrl-console = { workspace = true }
+lrl-gateway = { workspace = true }
+lrl-gex = { workspace = true }
+lrl-pipeline = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28",
+    "openai>=1.60",
+    "pytest>=8.3",
+    "pyyaml>=6.0",
+    "pytest-asyncio>=0.25",
+    "pytest-cov>=6.0",
+    "ruff>=0.9",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["rithmic_kit"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["packages", "services", "tests"]
+addopts = "--import-mode=importlib --strict-markers --cov=packages --cov=services --cov-report=term:skip-covered"
+asyncio_mode = "auto"
+markers = ["integration: needs the Docker Compose stack; run with LRL_INTEGRATION=1"]
+
+[tool.coverage.run]
+omit = ["*/tests/*"]

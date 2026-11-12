@@ -1,0 +1,73 @@
+/*
+ * Design tokens. This is an instrument, not a dashboard: the chrome is neutral and quiet so the
+ * data carries all of the color. Hairlines instead of shadows, small radii, one typeface with
+ * tabular figures. Light is the default; dark follows the system.
+ */
+:root {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f3;
+  --surface-3: #ebebea;
+  --border: #e6e6e4;
+  --border-strong: #d4d4d1;
+  --text: #1a1a19;
+  --text-muted: #6f6f6b;
+  --text-subtle: #9a9a96;
+  /* Interactive emphasis is the ink itself; color stays reserved for data and status. */
+  --accent: #1a1a19;
+  --accent-soft: #f0f0ee;
+  --accent-text: #ffffff;
+  --positive: #1f8a52;
+  --negative: #c93a32;
+  --warning: #a86200;
+  --warning-bg: #fbf3e4;
+  --danger-bg: #fbeceb;
+  --focus: #2563eb;
+  --shadow: none;
+  --shadow-raised: 0 8px 28px rgb(0 0 0 / 10%), 0 0 0 1px rgb(0 0 0 / 5%);
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --font:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo",
+    "Segoe UI", Roboto, sans-serif;
+  /* Numbers use the UI typeface with tabular figures, not a code font. */
+  --mono: var(--font);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e0f;
+    --surface: #141415;
+    --surface-2: #1b1b1d;
+    --surface-3: #242427;
+    --border: #232325;
+    --border-strong: #303033;
+    --text: #e8e8e6;
+    --text-muted: #8f8f8b;
+    --text-subtle: #666663;
+    --accent: #e8e8e6;
+    --accent-soft: #1d1d1f;
+    --accent-text: #0e0e0f;
+    --positive: #3fb27a;
+    --negative: #ef6a60;
+    --warning: #e0a94a;
+    --warning-bg: #262014;
+    --danger-bg: #2a1716;
+    --focus: #5b8def;
+    --shadow: none;
+    --shadow-raised: 0 12px 32px rgb(0 0 0 / 50%), 0 0 0 1px rgb(255 255 255 / 6%);
+    color-scheme: dark;
+  }
+}

@@ -1,0 +1,819 @@
+.flow-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.flow-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.flow-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 0;
+  padding: 0;
+}
+
+.flow-card > .flow-chart {
+  padding: var(--space-4) 0 var(--space-3) var(--space-4);
+}
+
+.flow-card > .flow-side {
+  padding: var(--space-4);
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .flow-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.flow-chart {
+  position: relative;
+  min-width: 0;
+  touch-action: none;
+}
+
+/* Node dots share the GEX colors: blue where dealers are long gamma, red where short. */
+.flow-dot-positive {
+  fill: var(--gex-positive);
+}
+
+.flow-dot-negative {
+  fill: var(--gex-negative);
+}
+
+.flow-dot-king {
+  stroke: var(--text);
+  stroke-width: 1;
+}
+
+/* The second-strongest node: a dashed ring, lighter than the king's. */
+.flow-dot-second {
+  stroke: var(--text);
+  stroke-width: 1;
+  stroke-dasharray: 1.5 1.5;
+  stroke-opacity: 0.8;
+}
+
+.flow-cursor line {
+  stroke: var(--text-muted);
+  stroke-dasharray: 3 3;
+}
+
+.flow-cursor text {
+  fill: var(--text);
+  font-size: 11px;
+  font-family: var(--mono);
+  paint-order: stroke;
+  stroke: var(--surface, #12161c);
+  stroke-width: 3px;
+}
+
+.flow-side {
+  min-width: 0;
+  overflow: auto;
+}
+
+.node-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+
+.node-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: right;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border, #2a3039);
+}
+
+.node-table td {
+  padding: 3px 6px;
+  text-align: right;
+}
+
+/* Sortable headings: the whole heading is the button; the arrow marks the sorted column. */
+.sort-button {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sort-button:hover,
+.node-table th[aria-sort="ascending"],
+.node-table th[aria-sort="descending"] {
+  color: var(--text);
+}
+
+.sort-button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sort-mark {
+  display: inline-block;
+  width: 0.8em;
+  text-align: center;
+}
+
+.node-table tr[data-king="true"] td {
+  font-weight: 700;
+}
+
+.node-bar-cell {
+  width: 30%;
+  text-align: left !important;
+}
+
+.node-bar {
+  display: block;
+  height: 8px;
+  border-radius: 0 4px 4px 0;
+}
+
+.node-bar-positive {
+  background: var(--gex-positive);
+}
+
+.node-bar-negative {
+  background: var(--gex-negative);
+}
+
+.flow-open {
+  stroke: var(--text-muted);
+  stroke-dasharray: 2 4;
+}
+
+/* The plot scrolls sideways when zoomed; the price axis beside it stays fixed. */
+.flow-chart {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.flow-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  min-width: 0;
+}
+
+.flow-scroll {
+  cursor: grab;
+  user-select: none;
+}
+
+.flow-scroll.flow-dragging {
+  cursor: grabbing;
+}
+
+.flow-hint {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Walls and flip: blue where dealers are long gamma, red where short, flip dashed and neutral. */
+.flow-levels path {
+  fill: none;
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
+.flow-level-call {
+  stroke: var(--gex-positive);
+}
+
+.flow-level-put {
+  stroke: var(--gex-negative);
+}
+
+.flow-level-flip {
+  stroke: var(--text-muted);
+  stroke-dasharray: 5 4;
+}
+
+.flow-levels-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin: 0 0 12px;
+  font-size: 12px;
+}
+
+.flow-levels-list dt {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flow-levels-list dd {
+  margin: 2px 0 0;
+}
+
+.flow-swatch-call {
+  background: var(--gex-positive);
+}
+
+.flow-swatch-put {
+  background: var(--gex-negative);
+}
+
+.flow-swatch-flip {
+  background: var(--text-muted);
+}
+
+.flow-axis {
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+/* Drawing tool bar: a narrow column of line glyphs left of the plot. */
+.draw-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 40px;
+  padding: 2px 0;
+  border-right: 1px solid var(--border);
+}
+
+.draw-tool {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.draw-tool svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.draw-tool:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.draw-tool[aria-pressed="true"] {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.draw-tool:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.draw-tool:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.draw-separator {
+  width: 20px;
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border);
+}
+
+.flow-scroll.flow-drawing {
+  cursor: crosshair;
+}
+
+/* Drawings */
+.drawing {
+  fill: none;
+  stroke: var(--focus);
+  stroke-width: 1.5;
+}
+
+.drawing-chosen {
+  stroke-width: 2;
+}
+
+.drawing-box {
+  fill: color-mix(in srgb, var(--focus) 10%, transparent);
+}
+
+.drawing-fib {
+  stroke-width: 1;
+}
+
+.drawing-measure {
+  stroke: none;
+}
+
+.drawing-measure-up {
+  fill: color-mix(in srgb, var(--positive) 16%, transparent);
+}
+
+.drawing-measure-down {
+  fill: color-mix(in srgb, var(--negative) 16%, transparent);
+}
+
+.drawing-label {
+  fill: var(--text);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+}
+
+.drawing-handle {
+  fill: var(--surface);
+  stroke: var(--focus);
+  stroke-width: 1.5;
+}
+
+/* Crosshair, current price and axis badges */
+.crosshair line {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  pointer-events: none;
+}
+
+.last-price-line {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 1 3;
+  pointer-events: none;
+}
+
+.axis-badge {
+  fill: var(--text);
+}
+
+.axis-badge-text {
+  fill: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.axis-badge-last.up {
+  fill: var(--positive);
+}
+
+.axis-badge-last.down {
+  fill: var(--negative);
+}
+
+.axis-badge-drawing {
+  fill: var(--focus);
+}
+
+/* Candle values for the hovered minute (or the latest), over the plot's top left. */
+.chart-legend {
+  position: absolute;
+  top: 4px;
+  left: 52px;
+  display: flex;
+  gap: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  color: var(--text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.chart-legend-label {
+  font-weight: 600;
+}
+
+.chart-legend-key {
+  color: var(--text-muted);
+}
+
+.chart-legend-change.up {
+  color: var(--positive);
+}
+
+.chart-legend-change.down {
+  color: var(--negative);
+}
+
+.drawing-fib-band {
+  opacity: 0.08;
+  stroke: none;
+  pointer-events: none;
+}
+
+/* Settings for the selected Fibonacci drawing, over the plot's top right. */
+.fib-settings {
+  position: absolute;
+  top: 36px;
+  right: 84px;
+  z-index: 3;
+  width: 268px;
+  padding: 10px 12px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+  font-size: 12px;
+}
+
+.fib-settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.fib-settings-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fib-close,
+.fib-remove {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.fib-close svg,
+.fib-remove svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.fib-close:hover,
+.fib-remove:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.fib-levels {
+  display: grid;
+  gap: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.fib-level {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.fib-value {
+  width: 100%;
+  min-width: 0;
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.fib-value:focus {
+  border-color: var(--focus);
+  outline: none;
+}
+
+.fib-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.fib-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.fib-text-button {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.fib-text-button:hover {
+  background: var(--surface-2);
+}
+
+.fib-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.fib-primary:hover {
+  background: var(--accent);
+  opacity: 0.9;
+}
+
+.color-picker {
+  position: relative;
+  display: inline-flex;
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.color-swatch[aria-pressed="true"] {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+.color-palette {
+  position: fixed;
+  z-index: 50;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(5, 20px);
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.color-custom {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-muted);
+}
+
+.color-custom input {
+  width: 28px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Actions for the selected drawing, centred over the top of the plot. */
+.drawing-bar {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+  transform: translateX(-50%);
+}
+
+/* Candles are drawn in price units under a scaling transform; keep their outlines 1px. */
+.candles line,
+.candles rect {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Filters: a toolbar button with a short list of switches under it. */
+.filter-menu {
+  position: relative;
+}
+
+.filter-button {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.filter-button:hover,
+.filter-button[aria-expanded="true"] {
+  background: var(--surface-2);
+}
+
+.filter-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  display: grid;
+  gap: 10px;
+  width: 320px;
+  padding: 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.filter-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: start;
+  cursor: pointer;
+}
+
+.filter-option input {
+  margin-top: 2px;
+}
+
+.filter-label {
+  display: block;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.filter-hint {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* "How to read": a short guide above the chart. */
+.flow-guide {
+  margin-bottom: var(--space-4);
+  padding: 16px 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.flow-guide-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.flow-guide-head h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.flow-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px 24px;
+}
+
+.flow-guide h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.flow-guide p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.guide-swatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.guide-positive {
+  background: var(--gex-positive);
+}
+
+.guide-negative {
+  background: var(--gex-negative);
+}
+
+/* Korean cheat sheet under the node table. */
+.cheat-sheet {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.cheat-sheet summary {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cheat-basics {
+  margin: 8px 0;
+  padding-left: 16px;
+  color: var(--text-muted);
+}
+
+.cheat-basics b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cheat-table {
+  width: 100%;
+  margin: 8px 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.cheat-table caption {
+  padding-bottom: 4px;
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+}
+
+.cheat-table th,
+.cheat-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  text-align: left;
+  vertical-align: top;
+}
+
+.cheat-table thead th {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.cheat-table th[scope="row"] {
+  width: 22%;
+  color: var(--text);
+  font-weight: 500;
+}

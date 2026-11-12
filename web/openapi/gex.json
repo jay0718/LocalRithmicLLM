@@ -1,0 +1,1372 @@
+{
+  "components": {
+    "schemas": {
+      "Bar": {
+        "properties": {
+          "close": {
+            "title": "Close",
+            "type": "number"
+          },
+          "high": {
+            "title": "High",
+            "type": "number"
+          },
+          "low": {
+            "title": "Low",
+            "type": "number"
+          },
+          "open": {
+            "title": "Open",
+            "type": "number"
+          },
+          "start_ns": {
+            "title": "Start Ns",
+            "type": "integer"
+          },
+          "trades": {
+            "title": "Trades",
+            "type": "integer"
+          },
+          "volume": {
+            "title": "Volume",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "start_ns",
+          "open",
+          "high",
+          "low",
+          "close",
+          "volume",
+          "trades"
+        ],
+        "title": "Bar",
+        "type": "object"
+      },
+      "CentralPivotRange": {
+        "description": "Levels for today, from the previous session's high, low and close. tc is always the upper bound.",
+        "properties": {
+          "bc": {
+            "title": "Bc",
+            "type": "number"
+          },
+          "close": {
+            "title": "Close",
+            "type": "number"
+          },
+          "high": {
+            "title": "High",
+            "type": "number"
+          },
+          "low": {
+            "title": "Low",
+            "type": "number"
+          },
+          "pivot": {
+            "title": "Pivot",
+            "type": "number"
+          },
+          "r1": {
+            "title": "R1",
+            "type": "number"
+          },
+          "r2": {
+            "title": "R2",
+            "type": "number"
+          },
+          "s1": {
+            "title": "S1",
+            "type": "number"
+          },
+          "s2": {
+            "title": "S2",
+            "type": "number"
+          },
+          "session_date": {
+            "format": "date",
+            "title": "Session Date",
+            "type": "string"
+          },
+          "tc": {
+            "title": "Tc",
+            "type": "number"
+          },
+          "width_pct": {
+            "title": "Width Pct",
+            "type": "number"
+          }
+        },
+        "required": [
+          "session_date",
+          "high",
+          "low",
+          "close",
+          "pivot",
+          "bc",
+          "tc",
+          "r1",
+          "s1",
+          "r2",
+          "s2",
+          "width_pct"
+        ],
+        "title": "CentralPivotRange",
+        "type": "object"
+      },
+      "DealerConvention": {
+        "description": "The assumed dealer position. Real positioning is not observable.",
+        "enum": [
+          "long_calls_short_puts",
+          "short_calls_long_puts"
+        ],
+        "title": "DealerConvention",
+        "type": "string"
+      },
+      "EquityOverlay": {
+        "properties": {
+          "call_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Wall"
+          },
+          "contracts_total": {
+            "title": "Contracts Total",
+            "type": "integer"
+          },
+          "contracts_used": {
+            "title": "Contracts Used",
+            "type": "integer"
+          },
+          "expiries": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Expiries",
+            "type": "array"
+          },
+          "flip_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flip Level"
+          },
+          "king_node": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "King Node"
+          },
+          "open_interest_source": {
+            "title": "Open Interest Source",
+            "type": "string"
+          },
+          "prices_missing": {
+            "title": "Prices Missing",
+            "type": "integer"
+          },
+          "prices_pending": {
+            "title": "Prices Pending",
+            "type": "integer"
+          },
+          "put_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Put Wall"
+          },
+          "ratio": {
+            "title": "Ratio",
+            "type": "number"
+          },
+          "ratio_basis": {
+            "enum": [
+              "close",
+              "live"
+            ],
+            "title": "Ratio Basis",
+            "type": "string"
+          },
+          "series_total": {
+            "title": "Series Total",
+            "type": "integer"
+          },
+          "source_close": {
+            "title": "Source Close",
+            "type": "number"
+          },
+          "strikes": {
+            "items": {
+              "$ref": "#/components/schemas/OverlayStrike"
+            },
+            "title": "Strikes",
+            "type": "array"
+          },
+          "symbol": {
+            "title": "Symbol",
+            "type": "string"
+          },
+          "target_close": {
+            "title": "Target Close",
+            "type": "number"
+          },
+          "total_gex": {
+            "title": "Total Gex",
+            "type": "number"
+          },
+          "trade_date": {
+            "title": "Trade Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "trade_date",
+          "source_close",
+          "target_close",
+          "ratio",
+          "ratio_basis",
+          "expiries",
+          "total_gex",
+          "call_wall",
+          "put_wall",
+          "king_node",
+          "flip_level",
+          "contracts_used",
+          "contracts_total",
+          "prices_missing",
+          "prices_pending",
+          "series_total",
+          "open_interest_source",
+          "strikes"
+        ],
+        "title": "EquityOverlay",
+        "type": "object"
+      },
+      "FlowHistoryOut": {
+        "properties": {
+          "expiry": {
+            "title": "Expiry",
+            "type": "string"
+          },
+          "frames": {
+            "items": {
+              "$ref": "#/components/schemas/NodeFrame"
+            },
+            "title": "Frames",
+            "type": "array"
+          },
+          "overnight": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NodeFrame"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "overnight_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overnight Ratio"
+          },
+          "ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ratio"
+          },
+          "session_date": {
+            "title": "Session Date",
+            "type": "string"
+          },
+          "symbol": {
+            "title": "Symbol",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "expiry",
+          "session_date",
+          "frames",
+          "ratio"
+        ],
+        "title": "FlowHistoryOut",
+        "type": "object"
+      },
+      "FlowNode": {
+        "properties": {
+          "strike": {
+            "title": "Strike",
+            "type": "number"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "strike",
+          "value"
+        ],
+        "title": "FlowNode",
+        "type": "object"
+      },
+      "GexSnapshot": {
+        "properties": {
+          "as_of_ns": {
+            "title": "As Of Ns",
+            "type": "integer"
+          },
+          "call_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Wall"
+          },
+          "contracts_total": {
+            "title": "Contracts Total",
+            "type": "integer"
+          },
+          "contracts_used": {
+            "title": "Contracts Used",
+            "type": "integer"
+          },
+          "convention": {
+            "$ref": "#/components/schemas/DealerConvention"
+          },
+          "data_source": {
+            "title": "Data Source",
+            "type": "string"
+          },
+          "expiries": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Expiries",
+            "type": "array"
+          },
+          "expiry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expiry"
+          },
+          "flip_level": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flip Level"
+          },
+          "king_node": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "King Node"
+          },
+          "king_node_gex": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "King Node Gex"
+          },
+          "missing_open_interest": {
+            "title": "Missing Open Interest",
+            "type": "integer"
+          },
+          "missing_quotes": {
+            "title": "Missing Quotes",
+            "type": "integer"
+          },
+          "oldest_settlement": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oldest Settlement"
+          },
+          "priced_from_settlement": {
+            "default": 0,
+            "title": "Priced From Settlement",
+            "type": "integer"
+          },
+          "put_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Put Wall"
+          },
+          "spot": {
+            "title": "Spot",
+            "type": "number"
+          },
+          "stale_quotes": {
+            "title": "Stale Quotes",
+            "type": "integer"
+          },
+          "strikes": {
+            "items": {
+              "$ref": "#/components/schemas/StrikeGex"
+            },
+            "title": "Strikes",
+            "type": "array"
+          },
+          "total_gex": {
+            "title": "Total Gex",
+            "type": "number"
+          },
+          "underlying": {
+            "title": "Underlying",
+            "type": "string"
+          },
+          "unpriced": {
+            "title": "Unpriced",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "data_source",
+          "underlying",
+          "spot",
+          "as_of_ns",
+          "convention",
+          "expiry",
+          "total_gex",
+          "flip_level",
+          "call_wall",
+          "put_wall",
+          "king_node",
+          "king_node_gex",
+          "strikes",
+          "contracts_total",
+          "contracts_used",
+          "missing_quotes",
+          "stale_quotes",
+          "missing_open_interest",
+          "unpriced"
+        ],
+        "title": "GexSnapshot",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "LiveUpdate": {
+        "description": "What subscribers receive each tick: the latest GEX snapshot and the forming bar.",
+        "properties": {
+          "bar": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Bar"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "market_open": {
+            "default": true,
+            "title": "Market Open",
+            "type": "boolean"
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GexSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "underlying": {
+            "title": "Underlying",
+            "type": "string"
+          }
+        },
+        "required": [
+          "underlying",
+          "snapshot",
+          "bar"
+        ],
+        "title": "LiveUpdate",
+        "type": "object"
+      },
+      "NodeFrame": {
+        "properties": {
+          "call_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Call Wall"
+          },
+          "computed_ns": {
+            "default": 0,
+            "title": "Computed Ns",
+            "type": "integer"
+          },
+          "flip": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flip"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/FlowNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "put_wall": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Put Wall"
+          },
+          "spot": {
+            "title": "Spot",
+            "type": "number"
+          },
+          "total": {
+            "default": 0.0,
+            "title": "Total",
+            "type": "number"
+          },
+          "ts_ns": {
+            "title": "Ts Ns",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ts_ns",
+          "spot",
+          "nodes"
+        ],
+        "title": "NodeFrame",
+        "type": "object"
+      },
+      "OverlayStrike": {
+        "properties": {
+          "call_gex": {
+            "title": "Call Gex",
+            "type": "number"
+          },
+          "net_gex": {
+            "title": "Net Gex",
+            "type": "number"
+          },
+          "put_gex": {
+            "title": "Put Gex",
+            "type": "number"
+          },
+          "source_strike": {
+            "title": "Source Strike",
+            "type": "number"
+          },
+          "strike": {
+            "title": "Strike",
+            "type": "number"
+          }
+        },
+        "required": [
+          "strike",
+          "source_strike",
+          "call_gex",
+          "put_gex",
+          "net_gex"
+        ],
+        "title": "OverlayStrike",
+        "type": "object"
+      },
+      "StrikeGex": {
+        "properties": {
+          "call_gex": {
+            "title": "Call Gex",
+            "type": "number"
+          },
+          "net_gex": {
+            "title": "Net Gex",
+            "type": "number"
+          },
+          "put_gex": {
+            "title": "Put Gex",
+            "type": "number"
+          },
+          "strike": {
+            "title": "Strike",
+            "type": "number"
+          }
+        },
+        "required": [
+          "strike",
+          "call_gex",
+          "put_gex",
+          "net_gex"
+        ],
+        "title": "StrikeGex",
+        "type": "object"
+      },
+      "UnderlyingOut": {
+        "properties": {
+          "expiries": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Expiries",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "overlay": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overlay"
+          },
+          "product": {
+            "title": "Product",
+            "type": "string"
+          },
+          "symbol": {
+            "title": "Symbol",
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbol",
+          "product",
+          "name"
+        ],
+        "title": "UnderlyingOut",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "LocalRithmicLLM GEX",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/bars": {
+      "get": {
+        "description": "Recent bars, oldest first, including the one still forming; optionally within [start_ns, end_ns).",
+        "operationId": "recent_bars_bars_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "interval",
+            "required": false,
+            "schema": {
+              "default": "1m",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "1d"
+              ],
+              "title": "Interval",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 300,
+              "maximum": 20000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start_ns",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Ns"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end_ns",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "End Ns"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Bar"
+                  },
+                  "title": "Response Recent Bars Bars Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recent Bars"
+      }
+    },
+    "/flow/dates": {
+      "get": {
+        "description": "Sessions with a replayed flow history for this future's ETF, oldest first.",
+        "operationId": "flow_dates_flow_dates_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Flow Dates Flow Dates Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Flow Dates"
+      }
+    },
+    "/flow/history": {
+      "get": {
+        "description": "Minute-by-minute flow nodes for one session, with the ETF-to-future price ratio for that day.\n\nskip_inside and skip_locked choose the trade filters (see FlowRules); both on by default.",
+        "operationId": "flow_history_flow_history_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "date",
+            "required": true,
+            "schema": {
+              "title": "Date",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skip_inside",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Skip Inside",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skip_locked",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Skip Locked",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowHistoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Flow History"
+      }
+    },
+    "/flow/live": {
+      "get": {
+        "description": "Today's live flow so far: one frame per market minute (or per 10 seconds with\nstream=true), the last one still updating.",
+        "operationId": "flow_live_flow_live_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skip_inside",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Skip Inside",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skip_locked",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Skip Locked",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "stream",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Stream",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FlowHistoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Flow Live"
+      }
+    },
+    "/levels/cpr": {
+      "get": {
+        "operationId": "cpr_levels_levels_cpr_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CentralPivotRange"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cpr Levels"
+      }
+    },
+    "/live/latest": {
+      "get": {
+        "operationId": "latest_update_live_latest_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiries",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 20,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiries"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LiveUpdate"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Latest Update"
+      }
+    },
+    "/overlays/equity": {
+      "get": {
+        "description": "End-of-day GEX of the ETF paired with this future, rescaled to the future's prices.",
+        "operationId": "equity_overlay_overlays_equity_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiries",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 20,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiries"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EquityOverlay"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Equity Overlay"
+      }
+    },
+    "/snapshots/latest": {
+      "get": {
+        "operationId": "latest_snapshot_snapshots_latest_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "underlying",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Underlying"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expiries",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 20,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Expiries"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GexSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Latest Snapshot"
+      }
+    },
+    "/underlyings": {
+      "get": {
+        "operationId": "list_underlyings_underlyings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UnderlyingOut"
+                  },
+                  "title": "Response List Underlyings Underlyings Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Underlyings"
+      }
+    }
+  }
+}

@@ -1,0 +1,170 @@
+name: lrl
+
+# Sized for a Raspberry Pi 5 shared with other apps. See docs/resource-budget.md.
+# Host ports bind to 127.0.0.1 and avoid defaults, so they don't clash with other stacks.
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  redpanda:
+    image: redpandadata/redpanda:v25.1.9
+    command:
+      - redpanda
+      - start
+      - --mode=dev-container
+      - --smp=1
+      - --memory=640M
+      - --reserve-memory=0M
+      - --overprovisioned
+      - --default-log-level=warn
+      - --kafka-addr=internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr=internal://redpanda:9092,external://localhost:19092
+    ports:
+      - "127.0.0.1:${REDPANDA_PORT:-19092}:19092"
+    volumes:
+      - redpanda:/var/lib/redpanda/data
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -Eq 'Healthy:.+true'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    deploy:
+      resources:
+        limits: { memory: 896M, cpus: "1.0" }
+    logging: *logging
+    restart: unless-stopped
+
+  redpanda-init:
+    image: redpandadata/redpanda:v25.1.9
+    depends_on:
+      redpanda: { condition: service_healthy }
+    entrypoint: ["/bin/bash", "-c"]
+    # Must match packages/common/src/lrl_common/topics.py; a test checks this.
+    command:
+      - >-
+        set -e;
+        rpk topic create md.events.v1 -X brokers=redpanda:9092 -p 3 -r 1
+        -c retention.ms=172800000 -c retention.bytes=5368709120 || true;
+        rpk topic create md.events.dlq.v1 -X brokers=redpanda:9092 -p 1 -r 1
+        -c retention.ms=1209600000 -c retention.bytes=1073741824 || true;
+        rpk topic alter-config md.events.v1 -X brokers=redpanda:9092
+        --set retention.ms=172800000 --set retention.bytes=5368709120;
+        rpk topic alter-config md.events.dlq.v1 -X brokers=redpanda:9092
+        --set retention.ms=1209600000 --set retention.bytes=1073741824
+    deploy:
+      resources:
+        limits: { memory: 128M, cpus: "0.5" }
+    logging: *logging
+    restart: "no"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: lrl
+      POSTGRES_USER: lrl
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    command:
+      - postgres
+      - -c
+      - shared_buffers=128MB
+      - -c
+      - effective_cache_size=256MB
+      - -c
+      - max_connections=40
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-15432}:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    shm_size: 128m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lrl -d lrl"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    deploy:
+      resources:
+        limits: { memory: 512M, cpus: "1.0" }
+    logging: *logging
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    # Gateway rate limits and cache both set TTLs, so volatile-lru never evicts a key that lacks one.
+    command: ["redis-server", "--maxmemory", "96mb", "--maxmemory-policy", "volatile-lru", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-16379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    deploy:
+      resources:
+        limits: { memory: 128M, cpus: "0.5" }
+    logging: *logging
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.4.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-19090}:9090"
+    volumes:
+      - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus:/prometheus
+    depends_on:
+      redpanda: { condition: service_healthy }
+      # Lets `up --wait` treat the one-shot topic setup as expected to exit.
+      redpanda-init: { condition: service_completed_successfully }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9090/-/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    deploy:
+      resources:
+        limits: { memory: 384M, cpus: "0.5" }
+    logging: *logging
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.0.2
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-13000}:3000"
+    volumes:
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana:/var/lib/grafana
+    depends_on:
+      prometheus: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    deploy:
+      resources:
+        limits: { memory: 256M, cpus: "0.5" }
+    logging: *logging
+    restart: unless-stopped
+
+volumes:
+  redpanda:
+  postgres:
+  prometheus:
+  grafana:

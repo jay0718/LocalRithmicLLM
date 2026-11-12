@@ -1,0 +1,22 @@
+[project]
+name = "lrl-collector"
+version = "0.1.0"
+description = "LocalRithmicLLM collector service"
+requires-python = ">=3.12"
+dependencies = [
+    "aiokafka[lz4]>=0.12",
+    "lrl-common",
+    "prometheus-client>=0.21",
+    "protobuf>=5",
+    "websockets>=14",
+]
+
+[tool.uv.sources]
+lrl-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lrl_collector"]

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .ink { fill: #1a1a19; } .paper { fill: #fbfbfa; }
+    @media (prefers-color-scheme: dark) { .ink { fill: #e8e8e6; } .paper { fill: #0e0e0f; } }
+  </style>
+  <!-- A price level with one node on it. -->
+  <rect class="ink" width="32" height="32" rx="7"/>
+  <rect class="paper" x="6" y="15" width="20" height="2" rx="1"/>
+  <circle class="paper" cx="19" cy="16" r="4.5"/>
+</svg>

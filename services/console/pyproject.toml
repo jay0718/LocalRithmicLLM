@@ -1,0 +1,23 @@
+[project]
+name = "lrl-console"
+version = "0.1.0"
+description = "LocalRithmicLLM console service"
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography>=44",
+    "fastapi>=0.115",
+    "lrl-common",
+    "protobuf>=5",
+    "uvicorn>=0.34",
+    "websockets>=14",
+]
+
+[tool.uv.sources]
+lrl-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lrl_console"]

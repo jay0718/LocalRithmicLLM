@@ -1,0 +1,23 @@
+[project]
+name = "lrl-gex"
+version = "0.1.0"
+description = "LocalRithmicLLM gex service"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "lrl-collector",
+    "lrl-common",
+    "uvicorn>=0.34",
+    "websockets>=14",
+]
+
+[tool.uv.sources]
+lrl-collector = { workspace = true }
+lrl-common = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lrl_gex"]
